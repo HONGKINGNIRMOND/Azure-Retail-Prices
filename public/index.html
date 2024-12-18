@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azure Retail Prices</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+  
+    <h1><i class="fas fa-cloud"></i> Azure Retail Prices Viewer</h1>
+  </header>
+  <main id="mainContent">
+    <!-- Filters -->
+    <div id="filters" class="filters">
+      <label for="serviceName">Service Name:</label>
+      <input type="text" id="serviceName" placeholder="Filter by Service Name">
+      
+      <label for="skuName">SKU Name:</label>
+      <input type="text" id="skuName" placeholder="Filter by SKU Name">
+  
+      <label for="currencyCode">Currency Code:</label>
+      <input type="text" id="currencyCode" placeholder="e.g., USD">
+  
+      <button id="applyFilters"><i class="fas fa-filter"></i> Apply Filters</button>
+    </div>
+    
+    <!-- Horizontal Scrollable Table Container -->
+    <div class="table-container">
+      <table id="table">
+        <thead>
+          <tr>
+            <th>Service Name</th>
+            <th>SKU Name</th>
+            <th>Currency Code</th>
+            <th>Retail Price</th>
+            <th>Unit Price</th>
+            <th>Region Name</th>
+            <th>Location</th>
+            <th>Effective Date</th>
+            <th>Meter Name</th>
+            <th>Product Name</th>
+          </tr>
+        </thead>
+        <tbody id="dataBody">
+          <!-- Fetched data will populate here -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+  
+
+  <script src="app.js"></script>
+</body>
+
+</html>
