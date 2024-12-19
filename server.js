@@ -1,23 +1,39 @@
+import express from 'express';
+import fetch from 'node-fetch'; // Ensure you have node-fetch installed
+
+const app = express();
+const port = 3000;
+
+// API route to handle the filtering
 app.get('/api/retail-prices', async (req, res) => {
   const { serviceName, skuName, currencyCode } = req.query;
 
-  let apiUrl = 'https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview';
+  // Build query parameters for the Azure Retail Prices API
+  let azureQuery = [];
+  if (serviceName) azureQuery.push(`$filter=serviceName eq '${serviceName}'`);
+  if (skuName) azureQuery.push(`$filter=skuName eq '${skuName}'`);
+  if (currencyCode) azureQuery.push(`$filter=currencyCode eq '${currencyCode}'`);
 
-  const filterParams = [];
-  if (serviceName) filterParams.push(`serviceName eq '${serviceName}'`);
-  if (skuName) filterParams.push(`skuName eq '${skuName}'`);
-  if (currencyCode) filterParams.push(`currencyCode eq '${currencyCode}'`);
-
-  if (filterParams.length > 0) {
-    apiUrl += `&$filter=${encodeURIComponent(filterParams.join(' and '))}`;
-  }
+  const queryString = azureQuery.length ? `&${azureQuery.join('&')}` : '';
 
   try {
-    const response = await fetch(apiUrl);
+    // Fetch data from Azure Retail Prices API
+    const response = await fetch(`https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview${queryString}`);
+    if (!response.ok) throw new Error(`Azure API error! Status: ${response.status}`);
+    
     const data = await response.json();
-    res.json(data); // Returns all fields provided by Azure API
+
+    // Return the filtered data as JSON to the client
+    res.json({ Items: data.Items });
   } catch (error) {
-    console.error('Error fetching data from Azure:', error);
-    res.status(500).json({ error: 'Failed to fetch data from Azure API' });
+    console.error('Error fetching data from Azure API:', error);
+    res.status(500).send('Error fetching data from Azure API');
   }
+});
+
+// Serve static files (for HTML, CSS, JS)
+app.use(express.static('public'));
+
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
