@@ -39,6 +39,7 @@ document.getElementById('applyFilters').addEventListener('click', async () => {
   } catch (error) {
     console.error('Error fetching data:', error);
   }
+  
 });
 
 
